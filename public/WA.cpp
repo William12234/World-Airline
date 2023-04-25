@@ -287,7 +287,7 @@ void routeSearch_1(Graph graph, int city_A, int city_B, int num_connection)
 void routeSearch_2(Graph graph, int city_A, int city_B, int city_C, int city_D)
 {
 	bool BFirst, CFirst;
-	vector<int> ans1, ans2;
+	vector<int> ans1, ans2; //ans1 is ABCD, ans2 is ACBD
 	int n = graph.get();
 	int d1[140], p2[140]; // hard coded for 140 cities
 	int d2[140], p1[140]; // hard coded for 140 cities
@@ -315,8 +315,71 @@ void routeSearch_2(Graph graph, int city_A, int city_B, int city_C, int city_D)
 		}
 	}
 	//At this point, we have two vectors, ans1 and ans2, that contain the shortest path from A to B and A to C respectively.
-	//We need to find the shortest path from B to C and C to B, and then from B to D and C to D.
+	//We need to find the shortest path from B to C and C to B, and then from C to D and B to D.
 	//Then, we can find the total length (if possible) of ABCD and ACBD, and compare them to see which one is shorter.
+
+	if(BFirst)
+	{
+		Dijkstra(graph, city_B, d1, p1);
+		if(d1[city_C] == INT_MAX)
+			BFirst = false;
+		else
+		{
+			int cur_city3 = city_C;
+			while (cur_city3 != -1)
+			{
+				ans1.insert(ans1.begin(), cur_city3);
+				cur_city3 = p1[cur_city3];
+			}
+		}
+	}
+	if(CFirst)
+	{
+		Dijkstra(graph, city_C, d2, p2);
+		if(d2[city_B] == INT_MAX)
+			CFirst = false;
+		else
+		{
+			int cur_city4 = city_B;
+			while (cur_city4 != -1)
+			{
+				ans2.insert(ans2.begin(), cur_city4);
+				cur_city4 = p2[cur_city4];
+			}
+		}
+	}
+
+		//Now ans1 and ans2 contain the paths ABC and ACB respectively.
+		//We need to find the shortest path from C to D and B to D, and then compare the total lengths of ABCD and ACBD.
+
+	if(BFirst)
+	{
+		if(d1[city_D] == INT_MAX)
+			BFirst = false;
+		else
+		{
+			int cur_city5 = city_D;
+			while (cur_city5 != -1)
+			{
+				ans1.insert(ans1.begin(), cur_city5);
+				cur_city5 = p1[cur_city5];
+			}
+		}
+	}
+	if(CFirst)
+	{
+		if(d2[city_D] == INT_MAX)
+			CFirst = false;
+		else
+		{
+			int cur_city6 = city_D;
+			while (cur_city6 != -1)
+			{
+				ans2.insert(ans2.begin(), cur_city6);
+				cur_city6 = p2[cur_city6];
+			}
+		}
+	}
 
 }
 
