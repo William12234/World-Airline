@@ -464,7 +464,77 @@ void routeSearch_2(Graph graph, int city_A, int city_B, int city_C, int city_D)
 	//Hope and pray that this code actually works.
 }
 
-// Task 3
-void routeSearch_3(Graph graph, int city_A, int city_B, int city_C)
-{
+//Task 3
+/*
+I am in city “A”, my friend John is in a different city “B”, and my other friend
+Ann is in yet another different city “C”. We want to find a city different from the
+three cities we are in to meet so that the total number of connections among three
+of us is minimized. Tell me the city we should fly to and the routes for us or tell
+me there is no such a city.
+*/
+void routeSearch_3(Graph graph, int city_A, int city_B, int city_C) {
+	//calculate the distance from city_A, city_B, and city_C to every other node
+	int n = graph.get();
+	int d_a[n], d_b[n], d_c[n], p_a[n], p_b[n], p_c[n];
+	Dijkstra(graph, city_A, d_a, p_a);
+	Dijkstra(graph, city_B, d_b, p_b);
+	Dijkstra(graph, city_C, d_c, p_c);
+
+	//trying to find the first shared city with the shortest path to city_A, city_B, and city_C
+	int min = INT_MAX;
+	int target;
+	for(int x = 0; x < n; x++) {
+		//add distances and compare to minimum, also check not repeating original cities
+		if(d_a[x] + d_b[x] + d_c[x] < min && d_a[x] != 0 && d_b[x] != 0 && d_c[x] != 0) {
+			target = x;
+			min = d_a[x] + d_b[x] + d_c[x];
+		}
+	}
+
+	//checking if there is a city that fulfills the requirements
+	if(min < 0) {
+		cout << "No such city." << endl;
+		return;
+	}
+
+	cout << "You three should meet at city: " << target << endl;
+	cout << "Route for the first person: city" << city_A;
+
+	//find path from city_A to target
+	deque<int> path;
+	int current = target;
+	while(current != city_A) {
+		path.push_front(current);
+		current = p_a[current];
+	}
+	
+	for(int x : path)
+		cout << " to city" << x;
+	cout << "\nTotal connection: " << path.size() << endl;
+	cout << "Route for the second person: city" << city_B;
+
+	//find path from city_B to target
+	path.clear();
+	current = target;
+	while(current != city_B) {
+		path.push_front(current);
+		current = p_b[current];
+	}
+
+	for(int x : path)
+		cout << " to city" << x;
+	cout << "\nTotal connection: " << path.size() << endl;
+	cout << "Route for the second person: city" << city_C;
+
+	//find path from city_C to target
+	path.clear();
+	current = target;
+	while(current != city_C) {
+		path.push_front(current);
+		current = p_c[current];
+	}
+
+	for(int x : path)
+		cout << " to city" << x;
+	cout << "\nTotal connection: " << path.size() << endl;
 }
