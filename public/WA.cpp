@@ -286,11 +286,11 @@ void routeSearch_1(Graph graph, int city_A, int city_B, int num_connection)
 // Or tell me there is no such a route.
 void routeSearch_2(Graph graph, int city_A, int city_B, int city_C, int city_D)
 {
-	bool BFirst, CFirst;
+	bool BFirst = true, CFirst = true;
 	vector<int> ans1, ans2; // ans1 is ABCD, ans2 is ACBD
 	int n = graph.get();
-	int d1[140], p2[140]; // hard coded for 140 cities
-	int d2[140], p1[140]; // hard coded for 140 cities
+	int d1[140], p1[140]; // hard coded for 140 cities
+	int d2[140], p2[140]; // hard coded for 140 cities
 	Dijkstra(graph, city_A, d1, p1);
 	if (d1[city_B] == INT_MAX)
 		BFirst = false;
